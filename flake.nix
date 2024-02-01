@@ -19,13 +19,13 @@
           pname = "gotem";
           version = "0.1.0";
           src = ./.;
-          vendorHash = "sha256-eKeUhS2puz6ALb+cQKl7+DGvm9Cl+miZAHX0imf9wdg=";
+          vendorHash = "sha256-s2sFbD2IH+TzOdnnMAKtE+cNuPitVpHf/IYR9tqhfRE=";
         };
         packages.default = self.packages.${system}.gotem;
 
         devShells.default = pkgs.mkShell {
           name = "gotem";
-          buildInputs = with pkgs; [ go gopls ];
+          buildInputs = with pkgs; [ cobra-cli go gopls ];
         };
       }
     );

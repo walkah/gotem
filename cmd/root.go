@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 James Walker <walkah@walkah.net>
+Copyright © 2023 James Walker <walkah@walkah.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,12 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
-
-
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -54,6 +54,8 @@ func Execute() {
 }
 
 func init() {
+	cobra.OnInitialize(initConfig)
+
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
@@ -65,4 +67,29 @@ func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
+func initConfig() {
+	userConfig, err := os.UserConfigDir()
+	if err != nil {
+		panic(err)
+	}
+	configDir := fmt.Sprintf("%s/gotem", userConfig)
+	// Make sure the config directory exists
+	os.Mkdir(configDir, 0755)
+	defaultFilePath := fmt.Sprintf("%s/gotem.toml", configDir)
 
+	viper.SetConfigName("gotem")
+	viper.SetConfigType("toml")
+	viper.AddConfigPath(configDir)
+	viper.AutomaticEnv()
+
+	// If a config file is found, read it in.
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			// Config file not found; use default
+			viper.WriteConfigAs(defaultFilePath)
+		} else {
+			// Config file was found but another error was produced
+			panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		}
+	}
+}
