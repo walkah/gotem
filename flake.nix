@@ -2,7 +2,7 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -19,7 +19,7 @@
           pname = "gotem";
           version = "0.1.0";
           src = ./.;
-          vendorHash = "sha256-pHeiiF3YWo2JvMX7H8qkP21Uq/AHHeLGNq/VV9NfYkU=";
+          vendorHash = "sha256-TUebsXaMc0d3m5cCWuVS1/QZMGN5yjLGeqmRrkHxtKE=";
         };
         packages.default = self.packages.${system}.gotem;
 
