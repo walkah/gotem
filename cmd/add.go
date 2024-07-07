@@ -1,16 +1,16 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2024 James Walker <walkah@walkah.net>
 */
 package cmd
 
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	git "github.com/go-git/go-git/v5"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"walkah.dev/walkah/gotem/internal/util"
 )
 
 // addCmd represents the add command
@@ -20,7 +20,7 @@ var addCmd = &cobra.Command{
 	Long:  `This command adds the current path to the list of git clones to track.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if cwd, err := os.Getwd(); err == nil {
-			relativePath, err := getRelativePath(cwd)
+			relativePath, err := util.GetRelativePath(cwd)
 			if err != nil {
 				panic(err)
 			}
@@ -43,18 +43,4 @@ var addCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-}
-
-func getRelativePath(absolutePath string) (string, error) {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
-	}
-
-	if strings.HasPrefix(absolutePath, homeDir) {
-		relativePath := strings.TrimPrefix(absolutePath, fmt.Sprintf("%s/", homeDir))
-		return relativePath, nil
-	}
-
-	return absolutePath, nil
 }
